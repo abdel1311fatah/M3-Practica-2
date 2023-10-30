@@ -1,73 +1,100 @@
 package org.example;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Exercisi2 {
     public Exercisi2() {
     }
 
     public void exercisi2() throws IOException {
-        File llista = new File("llista2.txt");
-        String texte = "1,2,3,4,5,\n6,7,8,9,10,\n11,12,13,14,15,\n16,17,18,19,20"; // separem cada 5 numeros amb el salt de linia
 
-        if (!llista.exists()) {
+        File llista = new File("llista2.txt");
+
+        if (!llista.exists()) { // si no existeix
 
             llista.createNewFile();
 
-            FileWriter fw = new FileWriter(llista, true);
+            String texte = "1,2,3,4,5,\n6,7,8,9,10,\n11,12,13,14,15,\n16,17,18,19,20";
+
+            FileWriter fw = new FileWriter(llista);
             BufferedWriter bw = new BufferedWriter(fw);
 
             bw.write(texte);
             bw.newLine();
             bw.close();
 
-            FileReader fr = new FileReader(llista);
-            BufferedReader br = new BufferedReader(fr);
+            BufferedReader br;
+            texte = "";
+            int gran = 0, fila = 0;
+            ArrayList<Integer> grans = new ArrayList<>();
 
-            String[] texteLlista = (String.valueOf(br.readLine()).split(",")); // separem per comes
-            Integer[] numerosLlista = new Integer[20]; // array on es guardaran els numeros
+            try {
+                List<String> allLines = Files.readAllLines(Paths.get(llista.toURI()));
 
-            for (int i = 0; i < texteLlista.length; i++) { // per omplir el array de numeros
-                numerosLlista[i] = Integer.valueOf(texteLlista[i]); // https://www.freecodecamp.org/news/java-string-to-int-how-to-convert-a-string-to-an-integer/
-            }
-
-            int gran = 0;
-
-            for (int i = 0; i < numerosLlista.length; i++) {
-                if (gran <= numerosLlista[i]){
-                    gran = numerosLlista[i];
+                for (String line : allLines) {
+                    String[] numeros = line.split(",");
+                    for (String numeroStr : numeros) {
+                        int numero = Integer.parseInt(numeroStr);
+                        if (gran <= numero) {
+                            gran = numero;
+                        }
+                    }
+                    grans.add(gran);
+                    gran = 0;
+                    fila++;
                 }
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            System.out.println("El numero mes gran de la llista es: " + gran);
-
-            br.close();
-            fr.close();
+            for (int i = 0; i < 4; i++) {
+                System.out.println("El numero mes gran de la fila " + (i + 1) + " es " + grans.get(i));
+            }
 
         }else{
 
-            FileReader fr = new FileReader(llista);
-            BufferedReader br = new BufferedReader(fr);
+            String texte = "1,2,3,4,5,\n6,7,8,9,10,\n11,12,13,14,15,\n16,17,18,19,20";
 
-            String[] texteLlista = (String.valueOf(br.readLine()).split(",")); // separem per comes
-            Integer[] numerosLlista = new Integer[20]; // array on es guardaran els numeros
+            FileWriter fw = new FileWriter(llista);
+            BufferedWriter bw = new BufferedWriter(fw);
 
-            for (int i = 0; i < texteLlista.length; i++) { // per omplir el array de numeros
-                numerosLlista[i] = Integer.valueOf(texteLlista[i]); // https://www.freecodecamp.org/news/java-string-to-int-how-to-convert-a-string-to-an-integer/
-            }
+            bw.write(texte);
+            bw.newLine();
+            bw.close();
 
-            int gran = 0;
+            BufferedReader br;
+            texte = "";
+            int gran = 0, fila = 0;
+            ArrayList<Integer> grans = new ArrayList<>();
 
-            for (int i = 0; i < numerosLlista.length; i++) {
-                if (gran <= numerosLlista[i]){
-                    gran = numerosLlista[i];
+            try {
+                List<String> allLines = Files.readAllLines(Paths.get(llista.toURI()));
+
+                for (String line : allLines) {
+                    String[] numeros = line.split(",");
+                    for (String numeroStr : numeros) {
+                        int numero = Integer.parseInt(numeroStr);
+                        if (gran <= numero) {
+                            gran = numero;
+                        }
+                    }
+                    grans.add(gran);
+                    gran = 0;
+                    fila++;
                 }
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            System.out.println("El numero mes gran de la llista es: " + gran);
-
-            br.close();
-            fr.close();
+            for (int i = 0; i < 4; i++) {
+                System.out.println("El numero mes gran de la fila " + (i + 1) + " es " + grans.get(i));
+            }
         }
     }
 }
